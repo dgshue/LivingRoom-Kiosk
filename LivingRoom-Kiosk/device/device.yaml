@@ -24,27 +24,6 @@ esp32:
       CONFIG_ESP32S3_DATA_CACHE_LINE_64B: y
       CONFIG_COMPILER_OPTIMIZATION_PERF: y
 
-# Esphome
-esphome:
-  name: ${name}
-  friendly_name: ${friendly_name}
-  area: ${room}
-  platformio_options:
-    build_flags: "-DBOARD_HAS_PSRAM"
-    board_build.arduino.memory_type: qio_opi
-    board_build.flash_mode: dio
-    board_upload.maximum_ram_size: 524288
-
-# Over the Air Updates
-ota:
-  platform: esphome
-
-# Enable Home Assistant API
-api:
-
-# Enable logging
-logger:
-
 # Video memory
 psram:
   mode: octal
