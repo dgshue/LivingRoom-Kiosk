@@ -45,229 +45,90 @@ sensor:
               '(int)round(x)' 
             ]
 
-  # Office Blind Position
+  # Downstairs Climate Temperature
   - platform: homeassistant
-    entity_id: cover.office_blind
-    id: office_blind_position
-    attribute: current_position
-
-  # Centauri Carbon Print Progress
-  - platform: homeassistant
-    entity_id: sensor.centauri_carbon_percent_complete_helper
-    id: centauri_carbon_percent
+    entity_id: climate.downstairs
+    id: downstairs_climate_temp
+    attribute: current_temperature
     on_value:
       - lvgl.label.update:
-          id: print_progress_label
+          id: downstairs_temp_label
           text:
-            format: "%.0f"
-            args: [ 'x' ]
+            format: "Down: %d°F"
+            args: [ '(int)round(x)' ]
 
-  # Filament Heater Humidity
+  # Master Bedroom Temperature
   - platform: homeassistant
-    entity_id: sensor.office_filament_heater_sensor_humidity
-    id: filament_heater_humidity
+    entity_id: sensor.master_bedroom_temperature
+    id: master_bedroom_temp_sensor
     on_value:
       - lvgl.label.update:
-          id: dryer_humidity_label
+          id: master_bedroom_temp_display
           text:
-            format: "%.0f"
-            args: [ 'x' ]
+            format: "%d°F"
+            args: [ '(int)round(x)' ]
+      - lvgl.label.update:
+          id: master_bedroom_temp_display_2
+          text:
+            format: "%d°F"
+            args: [ '(int)round(x)' ]
 
+  # Keek's Room Temperature
+  - platform: homeassistant
+    entity_id: sensor.keek_s_room_temperature
+    id: keeks_room_temp_sensor
+    on_value:
+      - lvgl.label.update:
+          id: keeks_room_temp_display
+          text:
+            format: "%d°F"
+            args: [ '(int)round(x)' ]
+      - lvgl.label.update:
+          id: keeks_room_temp_display_2
+          text:
+            format: "%d°F"
+            args: [ '(int)round(x)' ]
 
+  # Upstairs Climate Temperature
+  - platform: homeassistant
+    entity_id: climate.upstairs
+    id: upstairs_climate_temp
+    attribute: current_temperature
+    on_value:
+      - lvgl.label.update:
+          id: upstairs_temp_label
+          text:
+            format: "Up: %d°F"
+            args: [ '(int)round(x)' ]
+      - lvgl.label.update:
+          id: upstairs_temp_display
+          text:
+            format: "%d°F"
+            args: [ '(int)round(x)' ]
+
+  # Outdoor Temperature Display
+  - platform: homeassistant
+    entity_id: sensor.local_weather_outdoor_temperature_patty_s_house
+    id: outdoor_temp_sensor_display
+    on_value:
+      - lvgl.label.update:
+          id: outdoor_temp_display
+          text:
+            format: "%d°F"
+            args: [ '(int)round(x)' ]
+
+  # Greyson Room Temperature
+  - platform: homeassistant
+    entity_id: sensor.greyson_room_temperature
+    id: greyson_room_temp_sensor
+    on_value:
+      - lvgl.label.update:
+          id: greyson_room_temp_display
+          text:
+            format: "%d°F"
+            args: [ '(int)round(x)' ]
 
 binary_sensor:
-
-  # Office Evening Scene
-  - platform: homeassistant
-    id: office_scene_evening
-    entity_id: binary_sensor.office_scene_evening
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_scene_evening_button
-          state:
-            checked: !lambda return x;
-
-  # Office Dimmed Scene
-  - platform: homeassistant
-    id: office_scene_dimmed
-    entity_id: binary_sensor.office_scene_dimmed
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_scene_dimmed_button
-          state:
-            checked: !lambda return x;
-
-  # Office Calls Scene
-  - platform: homeassistant
-    id: office_scene_desk_call
-    entity_id: binary_sensor.office_scene_desk_call
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_scene_calls_button
-          state:
-            checked: !lambda return x;
-
-  # Office Features Scene
-  - platform: homeassistant
-    id: office_scene_features
-    entity_id: binary_sensor.office_scene_features
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_scene_features_button
-          state:
-            checked: !lambda return x;
-
-  # 3d Printer
-  - platform: homeassistant
-    id: office_3d_printer_power
-    entity_id: switch.office_3d_printer_power
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        - lvgl.widget.update:
-            id: printer_power_button
-            state:
-              checked: !lambda return x;
-        - lvgl.widget.update:
-            id: printer_power_icon
-            hidden: !lambda return x;
-        - lvgl.widget.update:
-            id: print_progress_container
-            hidden: !lambda return !x;
-
-  # Office Aircon
-  - platform: homeassistant
-    id: office_air_conditioner
-    entity_id: switch.office_air_conditioner
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_aircon_button
-          state:
-            checked: !lambda return x;
-
-  # Battery Charger
-  - platform: homeassistant
-    id: office_battery_charger
-    entity_id: switch.battery_charger
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: battery_charger_button
-          state:
-            checked: !lambda return x;
-
-  # Filament Heater 
-  - platform: homeassistant
-    id: office_filament_heater
-    entity_id: switch.office_filament_heater_893b
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        - lvgl.widget.update:
-            id: filament_heater_button
-            state:
-              checked: !lambda return x;
-        - lvgl.widget.update:
-            id: filament_heater_icon
-            hidden: !lambda return x;
-        - lvgl.widget.update:
-            id: dryer_humidity_container
-            hidden: !lambda return !x;
-
-  # Office Blind 100% (Open)
-  - platform: template
-    id: office_blind_100
-    lambda: |-
-      if (id(office_blind_position).has_state()) {
-        return abs(id(office_blind_position).state - 100) <= 3;
-      }
-      return false;
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_blind_open_button
-          state:
-            checked: !lambda return x;
-
-  # Office Blind 66% (Semi Open)
-  - platform: template
-    id: office_blind_66
-    lambda: |-
-      if (id(office_blind_position).has_state()) {
-        return abs(id(office_blind_position).state - 66) <= 3;
-      }
-      return false;
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_blind_66_button
-          state:
-            checked: !lambda return x;
-
-  # Office Blind 33% (Semi Closed)
-  - platform: template
-    id: office_blind_33
-    lambda: |-
-      if (id(office_blind_position).has_state()) {
-        return abs(id(office_blind_position).state - 33) <= 3;
-      }
-      return false;
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_blind_33_button
-          state:
-            checked: !lambda return x;
-
-  # Office Blind 0% (Close)
-  - platform: template
-    id: office_blind_0
-    lambda: |-
-      if (id(office_blind_position).has_state()) {
-        return abs(id(office_blind_position).state - 0) <= 3;
-      }
-      return false;
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_blind_close_button
-          state:
-            checked: !lambda return x;
-
-  # Office Storage Lights
-  - platform: homeassistant
-    id: office_storage_lights
-    entity_id: light.office_storage
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: storage_lights_button
-          state:
-            checked: !lambda return x;
-
-  # Network Rack
-  - platform: homeassistant
-    id: network_rack
-    entity_id: light.office_network_rack
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: network_rack_button
-          state:
-            checked: !lambda return x;
 
   # Living Room Lights
   - platform: homeassistant
@@ -292,18 +153,6 @@ binary_sensor:
           id: living_room_lamps_button
           state:
             checked: !lambda return x;
-
-  # Downstairs Climate Temperature
-  - platform: homeassistant
-    entity_id: climate.downstairs
-    id: downstairs_climate_temp
-    attribute: current_temperature
-    on_value:
-      - lvgl.label.update:
-          id: downstairs_temp_label
-          text:
-            format: "Down: %d°F"
-            args: [ '(int)round(x)' ]
 
   # Front Door Lock State
   - platform: homeassistant
@@ -349,22 +198,6 @@ binary_sensor:
           state:
             checked: !lambda return x;
 
-  # Master Bedroom Temperature
-  - platform: homeassistant
-    entity_id: sensor.master_bedroom_temperature
-    id: master_bedroom_temp_sensor
-    on_value:
-      - lvgl.label.update:
-          id: master_bedroom_temp_display
-          text:
-            format: "%d°F"
-            args: [ '(int)round(x)' ]
-      - lvgl.label.update:
-          id: master_bedroom_temp_display_2
-          text:
-            format: "%d°F"
-            args: [ '(int)round(x)' ]
-
   # Keek's LEDs
   - platform: homeassistant
     id: keeks_leds_state
@@ -376,39 +209,6 @@ binary_sensor:
           id: keeks_leds_button
           state:
             checked: !lambda return x;
-
-  # Keek's Room Temperature
-  - platform: homeassistant
-    entity_id: sensor.keek_s_room_temperature
-    id: keeks_room_temp_sensor
-    on_value:
-      - lvgl.label.update:
-          id: keeks_room_temp_display
-          text:
-            format: "%d°F"
-            args: [ '(int)round(x)' ]
-      - lvgl.label.update:
-          id: keeks_room_temp_display_2
-          text:
-            format: "%d°F"
-            args: [ '(int)round(x)' ]
-
-  # Upstairs Climate Temperature
-  - platform: homeassistant
-    entity_id: climate.upstairs
-    id: upstairs_climate_temp
-    attribute: current_temperature
-    on_value:
-      - lvgl.label.update:
-          id: upstairs_temp_label
-          text:
-            format: "Up: %d°F"
-            args: [ '(int)round(x)' ]
-      - lvgl.label.update:
-          id: upstairs_temp_display
-          text:
-            format: "%d°F"
-            args: [ '(int)round(x)' ]
 
   # Kitchen Lights
   - platform: homeassistant
@@ -445,28 +245,6 @@ binary_sensor:
           id: driveway_lights_button
           state:
             checked: !lambda return x;
-
-  # Outdoor Temperature Display
-  - platform: homeassistant
-    entity_id: sensor.local_weather_outdoor_temperature_patty_s_house
-    id: outdoor_temp_sensor_display
-    on_value:
-      - lvgl.label.update:
-          id: outdoor_temp_display
-          text:
-            format: "%d°F"
-            args: [ '(int)round(x)' ]
-
-  # Greyson Room Temperature
-  - platform: homeassistant
-    entity_id: sensor.greyson_room_temperature
-    id: greyson_room_temp_sensor
-    on_value:
-      - lvgl.label.update:
-          id: greyson_room_temp_display
-          text:
-            format: "%d°F"
-            args: [ '(int)round(x)' ]
 
   # Truck Switch
   - platform: homeassistant
