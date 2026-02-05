@@ -2,9 +2,9 @@ lvgl:
   top_layer:
     widgets:
     
-      # Temperature
+      # Temperature Display (Out/Down/Up)
       - label:
-          text: "-° / -°"
+          text: "Out: --°F / Down: --°F / Up: --°F"
           id: temperatures
           styles: roboto15_style
           align: top_left
@@ -23,8 +23,29 @@ lvgl:
           text_align: center
           text_color: 0xFFFFFF
           
+      # Page Indicator
+      - label:
+          text: "Page 1/9"
+          id: page_indicator
+          styles: roboto15_style
+          align: top_right
+          x: -8
+          y: 4
+          text_align: right
+          text_color: 0xFFFFFF
+          
   pages:
+    # Main Page - Scenes
     - id: main_page
+      on_swipe_left:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 2/9"
+        - lvgl.page.next:
+            animation: slide_left
+      on_swipe_right:
+        - lambda: |-
+            // Already on first page, do nothing
       layout: 
         type: flex
         flex_flow: column_wrap
@@ -37,368 +58,769 @@ lvgl:
       pad_right: 5
       
       widgets:
-      
-        # Office Features Scene
+        # Chill Time Scene
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: false
-            id: office_scene_features_button
+            id: scene_chill_time_button
             styles: control
             widgets:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: scene_features_icon                
+                  text: $nightlight
+              - label:
+                  align: bottom_left
+                  text: "Chill Time"
+            on_press:
+              - homeassistant.service:
+                  service: scene.turn_on
+                  data:
+                    entity_id: scene.chill_time
+
+        # Daniel Morning Scene
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            id: scene_daniel_morning_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  text: $lightbulb
+              - label:
+                  align: bottom_left
+                  text: "Daniel Morning"
+            on_press:
+              - homeassistant.service:
+                  service: scene.turn_on
+                  data:
+                    entity_id: scene.daniel_morning
+
+        # Morning Scene
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            id: scene_morning_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  text: $lightbulb
+              - label:
+                  align: bottom_left
+                  text: "Morning"
+            on_press:
+              - homeassistant.service:
+                  service: scene.turn_on
+                  data:
+                    entity_id: scene.morning
+
+        # Movie Time Scene
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            id: scene_movie_time_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  text: $nightlight
+              - label:
+                  align: bottom_left
+                  text: "Movie Time"
+            on_press:
+              - homeassistant.service:
+                  service: scene.turn_on
+                  data:
+                    entity_id: scene.movie_time
+
+        # Sexy Lighting Scene
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            id: scene_sexy_lighting_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
                   text: $ledstrip
               - label:
                   align: bottom_left
-                  id: scene_features_label
-                  text: "Features"
+                  text: "Sexy Lighting"
             on_press:
               - homeassistant.service:
                   service: scene.turn_on
                   data:
-                    entity_id: scene.office_features
+                    entity_id: scene.sexy_lighting
 
-        # Office Calls Scene
+        # Sleep Scene
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: false
-            id: office_scene_calls_button
+            id: scene_sleep_button
             styles: control
             widgets:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: office_scene_calls_icon                
-                  text: $videocall
-              - label:
-                  align: bottom_left
-                  id: office_scene_calls_label
-                  text: "Calls"
-            on_press:
-              - homeassistant.service:
-                  service: scene.turn_on
-                  data:
-                    entity_id: scene.office_desk_call
-
-        # Office Evening Scene
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: false
-            id: office_scene_evening_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: office_scene_evening_icon                
                   text: $nightlight
               - label:
                   align: bottom_left
-                  id: office_scene_evening_label
-                  text: "Evening"
+                  text: "Sleep"
             on_press:
               - homeassistant.service:
                   service: scene.turn_on
                   data:
-                    entity_id: scene.office_evening
+                    entity_id: scene.sleep
 
-        # Office Dimmed Scene
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: false
-            id: office_scene_dimmed_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: office_scene_dimmed_icon                
-                  text: $nightlight
-              - label:
-                  align: bottom_left
-                  id: office_scene_dimmed_label
-                  text: "Dimmed"
-            on_press:
-              - homeassistant.service:
-                  service: scene.turn_on
-                  data:
-                    entity_id: scene.office_dimmed
-
-        # Office Blind 100%
+    # Living Room Page
+    - id: living_room_page
+      layout: 
+        type: flex
+        flex_flow: column_wrap
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 30
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      on_swipe_left:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 3/9"
+        - lvgl.page.next:
+            animation: slide_left
+      on_swipe_right:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 1/9"
+        - lvgl.page.prev:
+            animation: slide_right
+      widgets:
+        # Living Room Lights
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: true
-            id: office_blind_open_button
+            id: living_room_lights_button
             styles: control
             widgets:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  text: $blinds_open
+                  id: living_room_lights_icon
+                  text: $lightbulb
               - label:
                   align: bottom_left
-                  text: "Open"
+                  text: "LR Lights"
             on_click:
               - homeassistant.service:
-                  service: cover.set_cover_position
+                  service: light.toggle
                   data:
-                    entity_id: cover.office_blind
-                    position: "100"
+                    entity_id: light.living_room_lights
 
-        # Office Blind 66%
+        # Living Room Lamps
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: true
-            id: office_blind_66_button
+            id: living_room_lamps_button
             styles: control
             widgets:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  text: $blinds_open
+                  id: living_room_lamps_icon
+                  text: $lightbulb
               - label:
                   align: bottom_left
-                  text: "Semi Open"
+                  text: "LR Lamps"
             on_click:
               - homeassistant.service:
-                  service: cover.set_cover_position
+                  service: light.toggle
                   data:
-                    entity_id: cover.office_blind
-                    position: "66"
+                    entity_id: light.living_room_lamps
 
-        # Office Blind 33%
+        # Downstairs Climate
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: true
-            id: office_blind_33_button
+            id: downstairs_climate_button
             styles: control
             widgets:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  text: $blinds_open
+                  text: $thermostat
               - label:
                   align: bottom_left
-                  text: "Semi Closed"
+                  id: downstairs_temp_label
+                  text: "Downstairs"
             on_click:
               - homeassistant.service:
-                  service: cover.set_cover_position
+                  service: climate.set_temperature
                   data:
-                    entity_id: cover.office_blind
-                    position: "33"
+                    entity_id: climate.downstairs
+                    temperature: 68
 
-        # Office Blind 0%
+        # Front Door Lock
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: true
-            id: office_blind_close_button
+            id: front_door_lock_button
             styles: control
             widgets:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  text: $blinds_closed
+                  id: front_door_lock_icon
+                  text: $lock_open
               - label:
                   align: bottom_left
-                  text: "Close"
+                  text: "Front Door"
+            on_click:
+              - if:
+                  condition:
+                    lambda: |-
+                      return id(front_door_lock_state).state;
+                  then:
+                    - homeassistant.service:
+                        service: lock.unlock
+                        data:
+                          entity_id: lock.front_door
+                  else:
+                    - homeassistant.service:
+                        service: lock.lock
+                        data:
+                          entity_id: lock.front_door
+
+        # Living Room Sound Bar
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: living_room_sound_bar_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  id: sound_bar_icon
+                  text: $speaker
+              - label:
+                  align: bottom_left
+                  text: "Sound Bar"
+            on_click:
+              - if:
+                  condition:
+                    lambda: |-
+                      return id(sound_bar_state).state == "playing";
+                  then:
+                    - homeassistant.service:
+                        service: media_player.media_pause
+                        data:
+                          entity_id: media_player.living_room_sound_bar
+                  else:
+                    - homeassistant.service:
+                        service: media_player.media_play
+                        data:
+                          entity_id: media_player.living_room_sound_bar
+
+    # Master Bedroom Page
+    - id: master_bedroom_page
+      layout: 
+        type: flex
+        flex_flow: column_wrap
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 30
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      on_swipe_left:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 4/9"
+        - lvgl.page.next:
+            animation: slide_left
+      on_swipe_right:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 2/9"
+        - lvgl.page.prev:
+            animation: slide_right
+      widgets:
+        # Master Bedroom Lights
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: master_bedroom_lights_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  id: master_bedroom_lights_icon
+                  text: $lightbulb
+              - label:
+                  align: bottom_left
+                  text: "MB Lights"
             on_click:
               - homeassistant.service:
-                  service: cover.set_cover_position
+                  service: light.toggle
                   data:
-                    entity_id: cover.office_blind
-                    position: "0"
+                    entity_id: light.master_bedroom_lights
 
+        # Master Bedroom Temperature Display
+        - obj:
+            height: $button_height_single
+            width: $button_width
+            bg_color: $button_control_color
+            radius: $radius
+            pad_all: $padding
+            widgets:
+              - label:
+                  text_font: roboto36_font
+                  text_color: 0xFFFFFF
+                  align: center
+                  id: master_bedroom_temp_display
+                  text: "--°F"
+              - label:
+                  align: bottom_left
+                  text: "MB Temp"
 
-        # 3d Printer
+    # Keek's Bedroom Page
+    - id: keeks_bedroom_page
+      layout: 
+        type: flex
+        flex_flow: column_wrap
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 30
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      on_swipe_left:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 5/9"
+        - lvgl.page.next:
+            animation: slide_left
+      on_swipe_right:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 3/9"
+        - lvgl.page.prev:
+            animation: slide_right
+      widgets:
+        # Keek's LEDs
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: true
-            id: printer_power_button
+            id: keeks_leds_button
             styles: control
             widgets:
-              # Icon (shown when OFF)
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: printer_power_icon
-                  text: $printer
-              # Progress (shown when ON)
-              - obj:
-                  align: top_left
-                  id: print_progress_container
-                  height: SIZE_CONTENT
-                  width: SIZE_CONTENT
-                  clickable: false
-                  layout:
-                    type: flex
-                    flex_flow: row
-                    flex_align_cross: end
-                  bg_opa: TRANSP
-                  border_width: 0
-                  pad_all: 0
-                  hidden: true
-                  widgets:
-                    - label:
-                        text_font: roboto36_font
-                        text_color: 0xFFFFFF
-                        id: print_progress_label
-                        text: "--"
-                    - label:
-                        text_font: roboto17_font
-                        text_color: 0xFFFFFF
-                        text: "%"
+                  id: keeks_leds_icon
+                  text: $ledstrip
               - label:
                   align: bottom_left
-                  text: "Printer"
+                  text: "Keek's LEDs"
+            on_click:
+              - homeassistant.service:
+                  service: light.toggle
+                  data:
+                    entity_id: light.keek_s_leds
+
+        # Keek's Room Temperature Display
+        - obj:
+            height: $button_height_single
+            width: $button_width
+            bg_color: $button_control_color
+            radius: $radius
+            pad_all: $padding
+            widgets:
+              - label:
+                  text_font: roboto36_font
+                  text_color: 0xFFFFFF
+                  align: center
+                  id: keeks_room_temp_display
+                  text: "--°F"
+              - label:
+                  align: bottom_left
+                  text: "Keek's Temp"
+
+    # Hallway Page
+    - id: hallway_page
+      layout: 
+        type: flex
+        flex_flow: column_wrap
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 30
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      on_swipe_left:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 6/9"
+        - lvgl.page.next:
+            animation: slide_left
+      on_swipe_right:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 4/9"
+        - lvgl.page.prev:
+            animation: slide_right
+      widgets:
+        # Upstairs Climate
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: upstairs_climate_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  text: $thermostat
+              - label:
+                  align: bottom_left
+                  id: upstairs_temp_label
+                  text: "Upstairs"
+            on_click:
+              - homeassistant.service:
+                  service: climate.set_temperature
+                  data:
+                    entity_id: climate.upstairs
+                    temperature: 66
+
+        # Upstairs Temperature Display
+        - obj:
+            height: $button_height_single
+            width: $button_width
+            bg_color: $button_control_color
+            radius: $radius
+            pad_all: $padding
+            widgets:
+              - label:
+                  text_font: roboto36_font
+                  text_color: 0xFFFFFF
+                  align: center
+                  id: upstairs_temp_display
+                  text: "--°F"
+              - label:
+                  align: bottom_left
+                  text: "Upstairs Temp"
+
+    # Kitchen Page
+    - id: kitchen_page
+      layout: 
+        type: flex
+        flex_flow: column_wrap
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 30
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      on_swipe_left:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 7/9"
+        - lvgl.page.next:
+            animation: slide_left
+      on_swipe_right:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 5/9"
+        - lvgl.page.prev:
+            animation: slide_right
+      widgets:
+        # Kitchen Lights
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: kitchen_lights_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  id: kitchen_lights_icon
+                  text: $lightbulb
+              - label:
+                  align: bottom_left
+                  text: "Kitchen"
+            on_click:
+              - homeassistant.service:
+                  service: light.toggle
+                  data:
+                    entity_id: light.kitchen_lights
+
+    # Outdoor Page
+    - id: outdoor_page
+      layout: 
+        type: flex
+        flex_flow: column_wrap
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 30
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      on_swipe_left:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 8/9"
+        - lvgl.page.next:
+            animation: slide_left
+      on_swipe_right:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 6/9"
+        - lvgl.page.prev:
+            animation: slide_right
+      widgets:
+        # Outdoor Lights
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: outdoor_lights_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  id: outdoor_lights_icon
+                  text: $lightbulb
+              - label:
+                  align: bottom_left
+                  text: "Outdoor"
+            on_click:
+              - homeassistant.service:
+                  service: light.toggle
+                  data:
+                    entity_id: light.outdoor_lights
+
+        # Driveway Lights
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: driveway_lights_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  id: driveway_lights_icon
+                  text: $lightbulb
+              - label:
+                  align: bottom_left
+                  text: "Driveway"
             on_click:
               - homeassistant.service:
                   service: switch.toggle
                   data:
-                    entity_id: switch.office_3d_printer_power
+                    entity_id: switch.driveway_lights
 
-        # Filament Heater
-        - button: 
+        # Outdoor Temperature Display
+        - obj:
             height: $button_height_single
             width: $button_width
-            checkable: true
-            id: filament_heater_button
-            styles: control
+            bg_color: $button_control_color
+            radius: $radius
+            pad_all: $padding
             widgets:
-              # Icon (shown when OFF)
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: filament_heater_icon
-                  text: $filament
-              # Humidity (shown when ON)
-              - obj:
-                  align: top_left
-                  id: dryer_humidity_container
-                  height: SIZE_CONTENT
-                  width: SIZE_CONTENT
-                  clickable: false
-                  layout:
-                    type: flex
-                    flex_flow: row
-                    flex_align_cross: end
-                  bg_opa: TRANSP
-                  border_width: 0
-                  pad_all: 0
-                  hidden: true
-                  widgets:
-                    - label:
-                        text_font: roboto36_font
-                        text_color: 0xFFFFFF
-                        id: dryer_humidity_label
-                        text: "--"
-                    - label:
-                        text_font: roboto17_font
-                        text_color: 0xFFFFFF
-                        text: "%"
+                  text_font: roboto36_font
+                  text_color: 0xFFFFFF
+                  align: center
+                  id: outdoor_temp_display
+                  text: "--°F"
               - label:
                   align: bottom_left
-                  text: "Dryer"
-            on_click:
-              - homeassistant.service:
-                  service: switch.toggle
-                  data:
-                    entity_id: switch.office_filament_heater_893b
+                  text: "Outdoor Temp"
 
-        # Office Aircon
-        - button: 
+    # Bedrooms Page (Temperature Overview)
+    - id: bedrooms_page
+      layout: 
+        type: flex
+        flex_flow: column_wrap
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 30
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      on_swipe_left:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 9/9"
+        - lvgl.page.next:
+            animation: slide_left
+      on_swipe_right:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 7/9"
+        - lvgl.page.prev:
+            animation: slide_right
+      widgets:
+        # Greyson Room Temperature
+        - obj:
             height: $button_height_single
             width: $button_width
-            checkable: true
-            id: office_aircon_button
-            styles: control
+            bg_color: $button_control_color
+            radius: $radius
+            pad_all: $padding
             widgets:
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  text: $aircon
+                  text_font: roboto36_font
+                  text_color: 0xFFFFFF
+                  align: center
+                  id: greyson_room_temp_display
+                  text: "--°F"
               - label:
                   align: bottom_left
-                  text: "Aircon"
-            on_click:
-              - homeassistant.service:
-                  service: script.office_air_conditioner
+                  text: "Greyson"
 
-        # Battery Charger
+        # Master Bedroom Temperature (on this page too)
+        - obj:
+            height: $button_height_single
+            width: $button_width
+            bg_color: $button_control_color
+            radius: $radius
+            pad_all: $padding
+            widgets:
+              - label:
+                  text_font: roboto36_font
+                  text_color: 0xFFFFFF
+                  align: center
+                  id: master_bedroom_temp_display_2
+                  text: "--°F"
+              - label:
+                  align: bottom_left
+                  text: "MB Temp"
+
+        # Keek's Room Temperature (on this page too)
+        - obj:
+            height: $button_height_single
+            width: $button_width
+            bg_color: $button_control_color
+            radius: $radius
+            pad_all: $padding
+            widgets:
+              - label:
+                  text_font: roboto36_font
+                  text_color: 0xFFFFFF
+                  align: center
+                  id: keeks_room_temp_display_2
+                  text: "--°F"
+              - label:
+                  align: bottom_left
+                  text: "Keek's Temp"
+
+    # Truck Page
+    - id: truck_page
+      layout: 
+        type: flex
+        flex_flow: column_wrap
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 30
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      on_swipe_left:
+        - lambda: |-
+            // Already on last page, do nothing
+      on_swipe_right:
+        - lvgl.label.update:
+            id: page_indicator
+            text: "Page 8/9"
+        - lvgl.page.prev:
+            animation: slide_right
+      widgets:
+        # Truck Switch
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: true
-            id: battery_charger_button
+            id: truck_button
             styles: control
             widgets:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: battery_charger_icon
+                  id: truck_icon
                   text: $battery
               - label:
                   align: bottom_left
-                  id: battery_charger_label
-                  text: "Charger"
+                  text: "Truck"
             on_click:
               - homeassistant.service:
                   service: switch.toggle
                   data:
-                    entity_id: switch.battery_charger
+                    entity_id: switch.truck
 
-        # Storage Lights
+        # Truck Doors Lock
         - button: 
             height: $button_height_single
             width: $button_width
             checkable: true
-            id: storage_lights_button
+            id: truck_doors_lock_button
             styles: control
             widgets:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: storage_lights_icon
-                  text: $package
+                  id: truck_doors_lock_icon
+                  text: $lock_open
               - label:
                   align: bottom_left
-                  id: storage_lights_label
-                  text: "Storage"
+                  text: "Truck Doors"
             on_click:
-              - homeassistant.service:
-                  service: light.toggle
-                  data:
-                    entity_id: light.office_storage
-
-        # Network Rack
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: network_rack_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: network_rack_icon
-                  text: $network
-              - label:
-                  align: bottom_left
-                  id: network_rack_label
-                  text: "Network Rack"
-            on_click:
-              - homeassistant.service:
-                  service: light.toggle
-                  data:
-                    entity_id: light.office_network_rack
+              - if:
+                  condition:
+                    lambda: |-
+                      return id(truck_doors_lock_state).state;
+                  then:
+                    - homeassistant.service:
+                        service: lock.unlock
+                        data:
+                          entity_id: lock.truck_doors
+                  else:
+                    - homeassistant.service:
+                        service: lock.lock
+                        data:
+                          entity_id: lock.truck_doors

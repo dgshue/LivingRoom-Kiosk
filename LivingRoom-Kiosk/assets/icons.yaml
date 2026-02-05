@@ -22,6 +22,13 @@ font:
       "\U000F089E",  # mdi-battery
       "\U000F07DE",  # mdi-filament
       "\U000F0317",  # mdi-lan
+      "\U000F0331",  # mdi-lock
+      "\U000F0332",  # mdi-lock-open
+      "\U000F0592",  # mdi-thermostat
+      "\U000F02C1",  # mdi-speaker
+      "\U000F02C2",  # mdi-speaker-off
+      "\U000F040D",  # mdi-play
+      "\U000F03A4",  # mdi-pause
       ]
 
 # Map icons to names
@@ -42,4 +49,11 @@ substitutions:
   battery:        "\U000F089E"
   filament:       "\U000F07DE"
   lan:            "\U000F0317"
+  lock:           "\U000F0331"
+  lock_open:      "\U000F0332"
+  thermostat:     "\U000F0592"
+  speaker:        "\U000F02C1"
+  speaker_off:    "\U000F02C2"
+  play:           "\U000F040D"
+  pause:          "\U000F03A4"
 
