@@ -159,32 +159,30 @@ binary_sensor:
     id: front_door_lock_state
     entity_id: lock.front_door
     attribute: state
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        - lvgl.widget.update:
-            id: front_door_lock_button
-            state:
-              checked: !lambda return x == "locked";
-        - lvgl.label.update:
-            id: front_door_lock_icon
-            text: !lambda return (x == "locked") ? "$lock" : "$lock_open";
+    on_value:
+      - lvgl.widget.update:
+          id: front_door_lock_button
+          state:
+            checked: !lambda return x == "locked";
+      - lvgl.label.update:
+          id: front_door_lock_icon
+          text: !lambda return (x == "locked") ? "$lock" : "$lock_open";
 
   # Living Room Sound Bar State
   - platform: homeassistant
     id: sound_bar_state
     entity_id: media_player.living_room_sound_bar
     attribute: state
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        - lvgl.widget.update:
-            id: living_room_sound_bar_button
-            state:
-              checked: !lambda return x == "playing";
-        - lvgl.label.update:
-            id: sound_bar_icon
-            text: !lambda return (x == "playing") ? "$speaker" : "$speaker_off";
+    on_value:
+      - lvgl.widget.update:
+          id: living_room_sound_bar_button
+          state:
+            checked: !lambda return x == "playing";
+      - lvgl.label.update:
+          id: sound_bar_icon
+          text: !lambda return (x == "playing") ? "$speaker" : "$speaker_off";
+
+binary_sensor:
 
   # Master Bedroom Lights
   - platform: homeassistant
@@ -263,13 +261,11 @@ binary_sensor:
     id: truck_doors_lock_state
     entity_id: lock.truck_doors
     attribute: state
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        - lvgl.widget.update:
-            id: truck_doors_lock_button
-            state:
-              checked: !lambda return x == "locked";
-        - lvgl.label.update:
-            id: truck_doors_lock_icon
-            text: !lambda return (x == "locked") ? "$lock" : "$lock_open";
+    on_value:
+      - lvgl.widget.update:
+          id: truck_doors_lock_button
+          state:
+            checked: !lambda return x == "locked";
+      - lvgl.label.update:
+          id: truck_doors_lock_icon
+          text: !lambda return (x == "locked") ? "$lock" : "$lock_open";

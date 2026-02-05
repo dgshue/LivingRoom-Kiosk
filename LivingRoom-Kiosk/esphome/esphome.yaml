@@ -1,25 +1,58 @@
-# ESP32-S3-Touch-LCD-7
-substitutions:
-  name: "your-device-name"
-  friendly_name: "Your Room Sensor"
-  room: "Your Room"
+esphome:
+  name: kiosk-living-room
+  friendly_name: Kiosk Living Room
+  platformio_options:
+    build_flags: "-DBOARD_HAS_PSRAM"
+    board_build.arduino.memory_type: qio_opi
+    board_build.flash_mode: dio
+    board_upload.maximum_ram_size: 524288
 
-# Wifi Setup
+psram:
+  mode: octal
+  speed: 120MHz
+
+esp32:
+  variant: esp32s3
+  flash_size: 8MB
+  cpu_frequency: 240MHz
+  framework:
+    type: esp-idf
+    advanced:
+      enable_idf_experimental_features: true
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "something"
+
+ota:
+  - platform: esphome
+    password: "something"
+
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 
-# Packages
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Kiosk-Living-Room"
+    password: "something"
+
+captive_portal:
+# Packages - Using local files (relative to esphome.yaml location)
 packages:
   setup:
-    url: https://github.com/jtenniswood/esphome-lvgl/
-    files: [waveshare-esp32-s3-touch-lcd-7/device/device.yaml,
-            waveshare-esp32-s3-touch-lcd-7/device/sensors.yaml,
-            waveshare-esp32-s3-touch-lcd-7/device/lvgl.yaml,
-            waveshare-esp32-s3-touch-lcd-7/addon/time.yaml,
-            waveshare-esp32-s3-touch-lcd-7/addon/backlight.yaml,
-            waveshare-esp32-s3-touch-lcd-7/addon/network.yaml,
-            waveshare-esp32-s3-touch-lcd-7/assets/fonts.yaml,
-            waveshare-esp32-s3-touch-lcd-7/assets/icons.yaml,
-            waveshare-esp32-s3-touch-lcd-7/theme/button.yaml]
+    url: https://github.com/dgshue/LivingRoom-Kiosk/
+    files: [LivingRoom-Kiosk/device/device.yaml,
+            LivingRoom-Kiosk/device/sensors.yaml,
+            LivingRoom-Kiosk/device/lvgl.yaml,
+            LivingRoom-Kiosk/addon/time.yaml,
+            LivingRoom-Kiosk/addon/backlight.yaml,
+            LivingRoom-Kiosk/addon/network.yaml,
+            LivingRoom-Kiosk/assets/fonts.yaml,
+            LivingRoom-Kiosk/assets/icons.yaml,
+            LivingRoom-Kiosk/theme/button.yaml]
     refresh: 1sec
